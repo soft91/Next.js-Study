@@ -1,9 +1,16 @@
 import fetch from 'isomorphic-unfetch';
+import Profile from '../../components/Profile';
 
-const index = ({user}) => {
-  const username = user && user.name;
-  return <div>{username}</div>
-}
+const name = ({user}) => {
+  if(!user) {
+    return null;
+  }
+  return (
+    <>
+      <Profile user={user} />
+    </>
+  );
+};
 
 export const getServerSideProps = async ({query}) => {
   const { name } = query;
@@ -20,4 +27,4 @@ export const getServerSideProps = async ({query}) => {
   }
 };
 
-export default index
+export default name;
