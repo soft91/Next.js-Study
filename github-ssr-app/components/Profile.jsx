@@ -15,7 +15,7 @@ const style = css`
     display: block;
     width: 100%;
   }
-  .profile-username { 
+  .profile-username {
     margin: 0;
     padding-top: 16px;
     font-size: 26px;
