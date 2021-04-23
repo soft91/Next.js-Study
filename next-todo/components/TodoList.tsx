@@ -6,6 +6,7 @@ import TrashCanIcon from "../public/static/svg/trash_can.svg";
 import CheckMarkIcon from "../public/static/svg/check_mark.svg";
 
 import { TodoType } from "../types/todo";
+import { checkTodoAPI } from "../lib/api/todos";
 
 const Container = styled.div`
   width: 100%;
@@ -189,6 +190,15 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     return colors;
   }, [todos]);
 
+  const checkTodo = async (id: number) => {
+    try {
+      await checkTodoAPI(id);
+      console.log("체크하였습니다.")
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
 	return (
 		<Container>
 			<div className="todo-list-header">
@@ -234,7 +244,7 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
 								<button 
 									type="button" 
 									className="todo-button" 
-									onClick={() => {}} 
+									onClick={() => { checkTodo(todo.id) }} 
 								/>
 							)}
 						</div>
