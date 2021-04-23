@@ -17,4 +17,9 @@ export const getServerSideProps = async() => {
   }
 }
 
+// getStaticProps Example
+// export const getStaticProps = async () => {
+//   return {props: { number: Math.random() }, revalidate: 3}
+// }
+
 export default index;
