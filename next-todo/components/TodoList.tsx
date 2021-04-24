@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback} from "react";
+import React, { useMemo, useCallback, useState} from "react";
 import styled from "styled-components";
 import palette from "../styles/palette";
 
@@ -7,6 +7,8 @@ import CheckMarkIcon from "../public/static/svg/check_mark.svg";
 
 import { TodoType } from "../types/todo";
 import { checkTodoAPI } from "../lib/api/todos";
+
+import { Router, useRouter } from "next/dist/client/router";
 
 const Container = styled.div`
   width: 100%;
@@ -129,6 +131,8 @@ interface IProps {
 }
 
 const TodoList: React.FC<IProps> = ({ todos }) => {
+  const [localTodos, setlocalTodos] = useState(todos);
+
 	const getTodoColorNums = useCallback(() => {
 		let red = 0;
 		let orange = 0;
@@ -190,10 +194,22 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     return colors;
   }, [todos]);
 
+  const router = useRouter();
+
   const checkTodo = async (id: number) => {
     try {
       await checkTodoAPI(id);
       console.log("체크하였습니다.")
+      router.reload();
+      router.push("/");
+
+      const newTodos = localTodos.map((todo) => {
+        if(todo.id === id) {
+          return {...todo, checked: !todo.checked};
+        }
+        return todo;
+      });
+      setlocalTodos(newTodos);
     } catch(e) {
       console.log(e);
     }
