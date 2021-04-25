@@ -6,9 +6,9 @@ import TrashCanIcon from "../public/static/svg/trash_can.svg";
 import CheckMarkIcon from "../public/static/svg/check_mark.svg";
 
 import { TodoType } from "../types/todo";
-import { checkTodoAPI } from "../lib/api/todos";
+import { checkTodoAPI, deleteTodoAPI } from "../lib/api/todos";
 
-import { Router, useRouter } from "next/dist/client/router";
+import { useRouter } from "next/dist/client/router";
 
 const Container = styled.div`
   width: 100%;
@@ -199,9 +199,6 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
   const checkTodo = async (id: number) => {
     try {
       await checkTodoAPI(id);
-      console.log("체크하였습니다.")
-      router.reload();
-      router.push("/");
 
       const newTodos = localTodos.map((todo) => {
         if(todo.id === id) {
@@ -210,7 +207,20 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
         return todo;
       });
       setlocalTodos(newTodos);
+      router.push("/");
     } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const deleteTodo = async (id: number) => {
+    try { 
+      await deleteTodoAPI(id);
+      const newTodos = localTodos.filter((todo) => todo.id !== id);
+      setlocalTodos(newTodos);
+      console.log("삭제했습니다.");
+      router.push("/");
+    } catch (e) {
       console.log(e);
     }
   }
@@ -248,11 +258,11 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
 								<>
 									<TrashCanIcon 
 										className="todo-trash-can" 
-										onClick={() => {}} 
+										onClick={() => { deleteTodo(todo.id) }} 
 									/>
 									<CheckMarkIcon 
 										className="todo-check-mark" 
-										onClick={() => {}} 
+										onClick={() => { checkTodo(todo.id) }} 
 									/>
 								</>
 							)}

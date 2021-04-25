@@ -8,7 +8,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.statusCode = 200;
       return res.send(todos);
     } catch (e) {
-      console.log(e);
       res.statusCode = 500;
       res.send(e);
     }
