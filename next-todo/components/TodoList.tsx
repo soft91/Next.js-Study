@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState} from "react";
+import React, { useMemo, useCallback } from "react";
 import styled from "styled-components";
 import palette from "../styles/palette";
 
@@ -8,7 +8,11 @@ import CheckMarkIcon from "../public/static/svg/check_mark.svg";
 import { TodoType } from "../types/todo";
 import { checkTodoAPI, deleteTodoAPI } from "../lib/api/todos";
 
-import { useRouter } from "next/dist/client/router";
+import { useDispatch } from "react-redux";
+
+import { useSelector } from "../store";
+import { todoActions } from "../store/todo";
+
 
 const Container = styled.div`
   width: 100%;
@@ -130,8 +134,10 @@ interface IProps {
   todos: TodoType[];
 }
 
-const TodoList: React.FC<IProps> = ({ todos }) => {
-  const [localTodos, setlocalTodos] = useState(todos);
+const TodoList: React.FC<IProps> = () => {
+  const todos = useSelector((state) => state.todo.todos);
+
+  const dispatch = useDispatch();
 
 	const getTodoColorNums = useCallback(() => {
 		let red = 0;
@@ -194,20 +200,18 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     return colors;
   }, [todos]);
 
-  const router = useRouter();
-
   const checkTodo = async (id: number) => {
     try {
       await checkTodoAPI(id);
 
-      const newTodos = localTodos.map((todo) => {
+      const newTodos = todos.map((todo) => {
         if(todo.id === id) {
           return {...todo, checked: !todo.checked};
         }
         return todo;
       });
-      setlocalTodos(newTodos);
-      router.push("/");
+      dispatch(todoActions.setTodo(newTodos));
+      console.log("체크하였습니다.");
     } catch(e) {
       console.log(e);
     }
@@ -216,10 +220,9 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
   const deleteTodo = async (id: number) => {
     try { 
       await deleteTodoAPI(id);
-      const newTodos = localTodos.filter((todo) => todo.id !== id);
-      setlocalTodos(newTodos);
+      const newTodos = todos.filter((todo) => todo.id !== id);
+      dispatch(todoActions.setTodo(newTodos));
       console.log("삭제했습니다.");
-      router.push("/");
     } catch (e) {
       console.log(e);
     }
