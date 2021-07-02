@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Data from "../../lib/data";
-import user from "../../lib/data/user";
 import { StoredUserType } from "../../types/user";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -31,9 +30,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const newUser: StoredUserType = {
       id: userId,
       email,
+      password: hashedPassword,
       firstname,
       lastname,
-      password: hashedPassword,
       birthday,
       profileImage: "/static/image/user/default_user_profile_image.jpg",
     };

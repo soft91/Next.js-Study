@@ -10,6 +10,8 @@ import Selector from "../common/Selector";
 import palette from "../../styles/palette";
 import { dayList, monthList, yearList } from "../../lib/staticData";
 import Button from "../common/Button";
+import { signupAPI } from "../../lib/api/auth";
+import { useDispatch } from "react-redux";
 
 const Container = styled.form`
   width: 568px;
@@ -74,6 +76,8 @@ const SignUpModal: React.FC = () => {
   const [birthDay, setBirthDay] = useState<string | undefined>();
   const [birthMonth, setBirthMonth] = useState<string | undefined>();
 
+  const dispatch = useDispatch();
+
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   }
@@ -106,8 +110,29 @@ const SignUpModal: React.FC = () => {
     setHidePassword(!hidePassword);
   }
 
+  const onSubmitSignUp = async (event: React.FormEvent<HTMLFontElement>) => {
+    event.preventDefault();
+
+    try {
+      const signUpbody = {
+        email,
+        lastName,
+        firstName,
+        password,
+        birthDay: new Date(
+          `${birthDay}-${birthDay!.replace("월", "")}-${birthDay}`
+        ).toISOString(),
+      };
+
+      const { data } = await signupAPI(signUpbody);
+      dispatch(userActions.setLoggedUser(data));
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   return (
-    <Container>
+    <Container onSubmit={onSubmitSignUp}>
       <CloseXIcon className="modal-close-x-icon" />
       <div className="input-wrapper">
         <Input 
