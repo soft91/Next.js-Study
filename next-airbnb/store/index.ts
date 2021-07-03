@@ -5,8 +5,10 @@ import {
   useSelector as useReduxSelector,
 } from "react-redux";
 import user from "./user";
+import common from "./common";
 
 const rootReducer = combineReducers({
+  common: common.reducer,
   user: user.reducer
 });
 
@@ -29,7 +31,7 @@ const reducer = (state: any, action: any) => {
 
 export const useSelector: TypedUseSelectorHook<RootState> = useReduxSelector;
 
-const initStore: MakeStore = () => {
+const initStore: MakeStore<any> = () => {
   const store = configureStore({
     reducer,
     devTools: true,
