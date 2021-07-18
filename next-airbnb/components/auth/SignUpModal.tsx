@@ -15,6 +15,7 @@ import { userActions } from "../../store/user";
 import { useDispatch } from "react-redux";
 import validateHooks from "../../hooks/useValidateMode";
 import PasswordWarning from "./PasswordWarning";
+import { authActions } from "../../store/auth";
 
 const Container = styled.form`
   width: 568px;
@@ -173,6 +174,10 @@ const SignUpModal: React.FC<IProps> = ({ closeModal }) => {
     return true;
   }
 
+  const changeToLoginModal = () => {
+    dispatch(authActions.setAuthMode("login"));
+  }
+
   const onSubmitSignUp = async (event: React.FormEvent<HTMLFontElement>) => {
     event.preventDefault();
 
@@ -328,6 +333,7 @@ const SignUpModal: React.FC<IProps> = ({ closeModal }) => {
         <span
           className="sign-up-modal-set-login"
           role="presentation"
+          onClick={changeToLoginModal}
         >
           로그인
         </span>

@@ -155,7 +155,7 @@ const Header: React.FC = () => {
         </button>
       )}
       <ModalPortal>
-        <SignUpModal closeModal={closeModal} />
+        <AuthModal closeModal={closeModal} />
       </ModalPortal>
     </Container>
   );

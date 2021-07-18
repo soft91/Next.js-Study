@@ -12,6 +12,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.send("필수 데이터가 없습니다.");
     }
 
+    const user = Data.user.find({ email });
+    if(!user) { 
+      res.statusCode = 404;
+      return res.send("해당 이메일의 유저가 없습니다.");
+    }
+
     const userExist = Data.user.exist({ email });
     if (userExist) {
       res.statusCode = 409;
