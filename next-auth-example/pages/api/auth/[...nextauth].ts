@@ -6,32 +6,37 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const authOptions: NextAuthOptions = {
 	session: {
 		strategy: "jwt",
-		maxAge: 24 * 60 * 60,
-		updateAge: 2 * 24 * 60 * 60,
 	},
 	providers: [
-		// GithubProvider({
-		//   clientId: process.env.GITHUB_ID,
-		//   clientSecret: process.env.GITHUB_SECRET,
-		// }),
-		// GoogleProvider({
-		//   clientId: process.env.GOOGLE_ID,
-		//   clientSecret: process.env.GOOGLE_SECRET,
-		// }),
 		CredentialsProvider({
 			name: "Credentials",
 			type: "credentials",
 			credentials: {},
-			authorize(credentials, req) {
+			async authorize(credentials, req) {
 				const { email, password } = credentials as {
 					email: string;
 					password: string;
 				};
-				if (email !== "yoon@gmail.com" && password !== "1234") {
-					return null;
-				}
+				let user = {};
 
-				return { id: "1234", name: "Yoon", email: "yoon@gmail.com" };
+				await fetch("https://httpbin.org/post", {
+					method: "POST",
+					body: JSON.stringify({
+						username: "yoon",
+						password: "1234",
+					}),
+				})
+					.then((res) => {
+						res.json();
+					})
+					.then((data) => {
+						console.log(data);
+						user = {
+							name: "data",
+						};
+					});
+
+				return { ...user, id: "test" };
 			},
 		}),
 	],
