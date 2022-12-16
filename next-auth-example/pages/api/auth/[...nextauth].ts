@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+import instance from "../../../utils/instance";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions: NextAuthOptions = {
@@ -13,21 +12,16 @@ const authOptions: NextAuthOptions = {
 			type: "credentials",
 			credentials: {},
 			async authorize(credentials, req) {
-				const { email, password } = credentials as {
-					email: string;
+				const { username, password } = credentials as {
+					username: string;
 					password: string;
 				};
 				let user = {};
 
-				await fetch("https://httpbin.org/post", {
-					method: "POST",
-					body: JSON.stringify({
-						username: "yoon",
-						password: "1234",
-					}),
-				})
-					.then((res) => {
-						res.json();
+				await instance
+					.post("https://httpbin.org/post", {
+						username,
+						password,
 					})
 					.then((data) => {
 						console.log(data);
@@ -47,15 +41,15 @@ const authOptions: NextAuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, account }) {
-			// Persist the OAuth access_token to the token right after signin
 			if (account) {
 				token.accessToken = account.access_token;
 			}
 			return token;
 		},
 		async session({ session, token, user }) {
-			// Send properties to the client, like an access_token from a provider.
-			//session.accessToken = token.accessToken;
+			if (token) {
+				session.user.accessToken = token.accessToken as string;
+			}
 			return session;
 		},
 	},

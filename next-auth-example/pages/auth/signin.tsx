@@ -6,7 +6,7 @@ interface Props {}
 
 const Signin: NextPage = (props): JSX.Element => {
 	const [userInfo, setUserInfo] = useState({
-		email: "",
+		username: "",
 		password: "",
 	});
 	const { data: session } = useSession();
@@ -14,30 +14,24 @@ const Signin: NextPage = (props): JSX.Element => {
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
 		const res = await signIn("credentials", {
-			email: userInfo.email,
+			email: userInfo.username,
 			password: userInfo.password,
 			redirect: false,
 		});
-
-		console.log(res);
 	};
-
-	useEffect(() => {
-		console.log(session);
-	}, [session]);
 
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
 				<h1>Login</h1>
 				<input
-					type="email"
-					placeholder="yoon@email.com"
-					value={userInfo.email}
+					type="text"
+					placeholder="yoon"
+					value={userInfo.username}
 					onChange={(e) =>
 						setUserInfo((prev) => ({
 							...prev,
-							email: e.target.value,
+							username: e.target.value,
 						}))
 					}
 				/>
