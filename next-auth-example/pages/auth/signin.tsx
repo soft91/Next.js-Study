@@ -1,22 +1,21 @@
 import { NextPage } from "next";
-import { FormEventHandler, useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { FormEventHandler, useState } from "react";
+import { signIn } from "next-auth/react";
 
-interface Props {}
-
-const Signin: NextPage = (props): JSX.Element => {
+const Signin: NextPage = (): JSX.Element => {
 	const [userInfo, setUserInfo] = useState({
 		username: "",
 		password: "",
 	});
-	const { data: session } = useSession();
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
-		const res = await signIn("credentials", {
+		await signIn("credentials", {
 			email: userInfo.username,
 			password: userInfo.password,
 			redirect: false,
+		}).then((res) => {
+			if (res?.ok) console.log(res.ok);
 		});
 	};
 
@@ -26,7 +25,7 @@ const Signin: NextPage = (props): JSX.Element => {
 				<h1>Login</h1>
 				<input
 					type="text"
-					placeholder="yoon"
+					placeholder="ID"
 					value={userInfo.username}
 					onChange={(e) =>
 						setUserInfo((prev) => ({

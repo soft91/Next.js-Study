@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import instance from "../../../utils/instance";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions: NextAuthOptions = {
@@ -8,7 +7,6 @@ const authOptions: NextAuthOptions = {
 	},
 	providers: [
 		CredentialsProvider({
-			name: "Credentials",
 			type: "credentials",
 			credentials: {},
 			async authorize(credentials, req) {
@@ -16,21 +14,8 @@ const authOptions: NextAuthOptions = {
 					username: string;
 					password: string;
 				};
-				let user = {};
 
-				await instance
-					.post("https://httpbin.org/post", {
-						username,
-						password,
-					})
-					.then((data) => {
-						console.log(data);
-						user = {
-							name: "data",
-						};
-					});
-
-				return { ...user, id: "test" };
+				return { id: username, name: username };
 			},
 		}),
 	],

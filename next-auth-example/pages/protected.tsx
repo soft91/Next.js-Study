@@ -4,26 +4,25 @@ import Router from "next/router";
 import { useEffect } from "react";
 
 const Protected: NextPage = (): JSX.Element => {
-  const { status, data } = useSession();
+	const { status, data } = useSession();
 
-  const csrfToken = async () => {
-    const csrfToken = await getCsrfToken();
-    console.log(csrfToken);
-  };
+	const csrfToken = async () => {
+		const csrfToken = await getCsrfToken();
+	};
 
-  useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/auth/signin");
-    csrfToken();
-  }, [status]);
+	useEffect(() => {
+		if (status === "unauthenticated") Router.replace("/auth/signin");
+		csrfToken();
+	}, [status]);
 
-  if (status === "authenticated")
-    return (
-      <div>
-        This page is Protected for special people. like {"\n"}
-        {JSON.stringify(data.user, null, 2)}
-      </div>
-    );
-  return <div>Loading...</div>;
+	if (status === "authenticated")
+		return (
+			<div>
+				This page is Protected for special people. like {"\n"}
+				{JSON.stringify(data.user, null, 2)}
+			</div>
+		);
+	return <div>Loading...</div>;
 };
 
 export default Protected;
