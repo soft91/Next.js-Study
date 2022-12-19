@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react";
 
 // Axios Access Token
 const axiosConfig: AxiosRequestConfig = {
-	baseURL: "/",
+	baseURL: "http://localhost:3000",
 	withCredentials: true,
 };
 
