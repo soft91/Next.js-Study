@@ -35,6 +35,7 @@ const authOptions: NextAuthOptions = {
 			if (token) {
 				session.user.accessToken = token.accessToken as string;
 			}
+			console.log(user);
 			return session;
 		},
 	},

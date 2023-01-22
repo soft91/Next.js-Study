@@ -1,8 +1,11 @@
 import { NextPage } from "next";
 import { FormEventHandler, useState } from "react";
 import { signIn } from "next-auth/react";
+import { useRecoilState } from "recoil";
+import { loginAtom } from "../../recoil/index";
 
 const Signin: NextPage = (): JSX.Element => {
+	const [user, setUser] = useRecoilState(loginAtom);
 	const [userInfo, setUserInfo] = useState({
 		username: "",
 		password: "",
@@ -11,11 +14,13 @@ const Signin: NextPage = (): JSX.Element => {
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
 		await signIn("credentials", {
-			email: userInfo.username,
+			username: userInfo.username,
 			password: userInfo.password,
 			redirect: false,
 		}).then((res) => {
 			if (res?.ok) console.log(res.ok);
+			debugger;
+			setUser({ username: userInfo.username });
 		});
 	};
 
@@ -25,7 +30,7 @@ const Signin: NextPage = (): JSX.Element => {
 				<h1>Login</h1>
 				<input
 					type="text"
-					placeholder="ID"
+					placeholder="username"
 					value={userInfo.username}
 					onChange={(e) =>
 						setUserInfo((prev) => ({
