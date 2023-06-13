@@ -1,11 +1,11 @@
-import { useRef, useMemo, LegacyRef, Dispatch, SetStateAction } from "react";
+import { useRef, useMemo, Dispatch, SetStateAction, MutableRefObject } from "react";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill, { ReactQuillProps } from "react-quill";
 
 interface IWrappedComponent extends ReactQuillProps {
-	forwardedRef: LegacyRef<ReactQuill>;
+	forwardedRef: MutableRefObject<ReactQuill>;
 }
 
 const QuillNoSSRWrapper = dynamic(
